@@ -27,6 +27,7 @@ BuildRequires: cmake
 
 %package devel
 Summary: Libraries, includes, etc to develop with YAJL
+Group: Development/Libraries
 Requires: %{name} = %{version}-%{release}
 
 %description
