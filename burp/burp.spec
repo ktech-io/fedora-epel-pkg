@@ -1,7 +1,7 @@
 Name:		burp
 Summary:	A network-based backup and restore program
 Version:	1.4.40
-Release:	3%{?dist}
+Release:	4%{?dist}
 Group:		Backup Server
 License:	AGPLv3 and BSD and GPLv2+ and LGPLv2+
 URL:		http://burp.grke.org/
@@ -12,6 +12,7 @@ Source2:	burp.service
 # Caused by narrowing props on arm and i386
 # Approach adopted from src/conffile.c in burb-2.0.32
 Patch0:		burp-1.4.40-narrowing.patch
+Patch1:		burp-1.4.40_burp_ca-lock.patch
 BuildRequires:	librsync-devel
 BuildRequires:	zlib-devel
 BuildRequires:	openssl-devel
@@ -78,9 +79,14 @@ mkdir -p %{buildroot}%{_initddir}
 install -p -m 0755 %{SOURCE1} %{buildroot}%{_initddir}/%{name}
 %endif
 
+# a copy is present in doc stuff
+rm -f %{buildroot}%{_sysconfdir}/burp/clientconfdir/testclient
+rm -f %{buildroot}%{_sysconfdir}/burp/clientconfdir/incexc/example
+
 %files client
 %defattr(-,root,root,-)
 %doc README CHANGELOG DONATIONS TODO CONTRIBUTORS UPGRADING
+%doc configs/client
 %if 0%{?rhel} <= 6
 	%doc LICENSE
 %else
@@ -94,8 +100,8 @@ install -p -m 0755 %{SOURCE1} %{buildroot}%{_initddir}/%{name}
 %{_mandir}/man8/burp.8*
 
 %files server
-%doc docs/autoupgrade.txt docs/baremetal-windows2008.txt docs/baremetal-windows7.txt 
-%doc docs/burp_ca.txt docs/debug.txt docs/security-models.txt docs/shuffling.txt
+%doc docs/*
+%doc configs/server
 %config(noreplace) %{_sysconfdir}/burp/CA.cnf
 %config(noreplace) %{_sysconfdir}/burp/burp-server.conf
 %config(noreplace) %{_sysconfdir}/burp/timer_script
@@ -148,6 +154,11 @@ fi
 
 
 %changelog
+* Sun Mar 13 2016 Pierre Bourgin <pierre.bourgin@free.fr> - 1.4.40-4
+- client: fix race condition in burp_ca
+- server: use glob for docs/* files.
+- copy <source>/configs/<subpkg>/ into their documentation (including crontab samples)
+
 * Fri Feb 19 2016 Ralf Corsépius <corsepiu@fedoraproject.org> - 1.4.40-3
 - Add burp-1.4.40-narrowing.patch (F24FTBFS, RHBZ#1307363).
 
