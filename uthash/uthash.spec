@@ -5,6 +5,7 @@
 %global debug_package %{nil}
 
 Name:           uthash
+Group:          Development Libraries
 Version:        1.9.9
 Release:        10%{?dist}
 Summary:        A hash table for C structures
@@ -19,6 +20,7 @@ structure to act as the key. Then use these macros to store, retrieve or
 delete items from the hash table.
 
 %package        devel
+Group:          Development Libraries
 Summary:        A hash table for C structures (headers only)
 Provides:       %{name}-static = %{version}-%{release}
 BuildArch:      noarch
@@ -40,11 +42,10 @@ install -d %{buildroot}%{_includedir}
 install -pm0644 src/*.h %{buildroot}%{_includedir}/
 
 %check
-%make_build -C tests/
+cd tests && make %{?_smp_mflags}
 
 %files devel
-%doc doc/*.txt
-%license LICENSE
+%doc LICENSE doc/*.txt
 %{_includedir}/ut*.h
 
 %changelog
