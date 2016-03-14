@@ -21,7 +21,8 @@ BuildRequires:	zlib-devel
 BuildRequires:	openssl-devel
 BuildRequires:	ncurses-devel
 BuildRequires:	libacl-devel
-BuildRequires:	uthash-devel
+# burp 1.x provides its own uthash
+#BuildRequires:	uthash-devel
 BuildRequires:	yajl-devel
 
 %if 0%{?fedora} >= 19 || 0%{?rhel} >= 7
