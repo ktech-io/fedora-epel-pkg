@@ -1,4 +1,4 @@
 
-'el5': dedicated branch for building burp and burp2 for EPEL-5.
+`el5`: dedicated branch for building burp (1.x) for EPEL-5.
 
-See README.md of branch master for more details.
+See README.md of `master` branch for more details.
