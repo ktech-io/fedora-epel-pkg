@@ -13,6 +13,9 @@ Source2:	burp.service
 # Approach adopted from src/conffile.c in burb-2.0.32
 Patch0:		burp-1.4.40-narrowing.patch
 Patch1:		burp-1.4.40_burp_ca-lock.patch
+%if 0%{?rhel} < 7
+BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
+%endif
 BuildRequires:	librsync-devel
 BuildRequires:	zlib-devel
 BuildRequires:	openssl-devel
@@ -35,6 +38,7 @@ backing up Windows computers.
 
 %package client
 Summary:	burp backup client
+Group:		Backup Server
 Requires:	librsync >= 1.0
 Provides:	burp = %{version}-%{release}
 Provides:	burp-client = %{version}-%{release}
@@ -48,6 +52,7 @@ backing up Windows computers.
 
 %package server
 Summary:	burp backup server
+Group:		Backup Server
 Requires:	burp-client%{?_isa} = %{version}-%{release}
 Requires:	openssl-perl
 Provides:	burp-server = %{version}-%{release}
@@ -75,8 +80,8 @@ make install DESTDIR=%{buildroot}
 mkdir -p %{buildroot}%{_unitdir}
 install -p -m 0644 %{SOURCE2} %{buildroot}%{_unitdir}/
 %else
-mkdir -p %{buildroot}%{_initddir}
-install -p -m 0755 %{SOURCE1} %{buildroot}%{_initddir}/%{name}
+mkdir -p %{buildroot}%{_initrddir}
+install -p -m 0755 %{SOURCE1} %{buildroot}%{_initrddir}/%{name}
 %endif
 
 # a copy is present in doc stuff
@@ -110,8 +115,6 @@ rm -f %{buildroot}%{_sysconfdir}/burp/clientconfdir/incexc/example
 %config(noreplace) %{_sysconfdir}/burp/ssl_extra_checks_script
 %config(noreplace) %{_sysconfdir}/burp/autoupgrade/server/win32/script
 %config(noreplace) %{_sysconfdir}/burp/autoupgrade/server/win64/script
-%config(noreplace) %{_sysconfdir}/burp/clientconfdir/incexc/example
-%config(noreplace) %{_sysconfdir}/burp/clientconfdir/testclient
 %dir %{_sysconfdir}/burp/autoupgrade/server/win32
 %dir %{_sysconfdir}/burp/autoupgrade/server/win64
 %dir %{_sysconfdir}/burp/autoupgrade/server
@@ -127,7 +130,7 @@ rm -f %{buildroot}%{_sysconfdir}/burp/clientconfdir/incexc/example
 %if 0%{?fedora} >= 19 || 0%{?rhel} >= 7
 %{_unitdir}/burp.service
 %else
-%{_initddir}/%{name}
+%{_initrddir}/%{name}
 %endif
 
 %post server
@@ -158,6 +161,7 @@ fi
 - client: fix race condition in burp_ca
 - server: use glob for docs/* files.
 - copy <source>/configs/<subpkg>/ into their documentation (including crontab samples)
+- fix for rhel5 building.
 
 * Fri Feb 19 2016 Ralf Corsépius <corsepiu@fedoraproject.org> - 1.4.40-3
 - Add burp-1.4.40-narrowing.patch (F24FTBFS, RHBZ#1307363).
