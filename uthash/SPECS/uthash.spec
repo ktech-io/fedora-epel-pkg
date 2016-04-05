@@ -5,6 +5,7 @@
 %global debug_package %{nil}
 
 Name:           uthash
+Group:          Development
 Version:        1.9.9
 Release:        6%{?dist}
 Summary:        A hash table for C structures
@@ -19,6 +20,7 @@ structure to act as the key. Then use these macros to store, retrieve or
 delete items from the hash table. 
 
 %package        devel
+Group:          Development
 Summary:        Development files for %{name}
 Provides:       %{name} = %{version}-%{release}
 Provides:       %{name}-static = %{version}-%{release}
