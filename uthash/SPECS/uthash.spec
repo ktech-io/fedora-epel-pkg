@@ -7,11 +7,15 @@
 Name:           uthash
 Group:          Development
 Version:        1.9.9
-Release:        6%{?dist}
+Release:        7%{?dist}
 Summary:        A hash table for C structures
 License:        BSD
 URL:            http://troydhanson.github.io/uthash
 Source0:        https://github.com/troydhanson/%{name}/archive/v%{version}.tar.gz#/%{name}-%{version}.tar.gz
+
+%if 0%{?rhel} < 7
+BuildRoot:      %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
+%endif
 
 %description
 Any C structure can be stored in a hash table using uthash. Just add a
@@ -48,6 +52,9 @@ cd tests && make %{?_smp_mflags}
 %{_includedir}/ut*.h
 
 %changelog
+* Wed May 25 2016 Pierre Bourgin <pierre.bourgin@fre.fr> - 1.9.9-7
+- define %%buildroot if <el7 (for el5 support)
+
 * Wed May 28 2014 Björn Esser <bjoern.esser@gmail.com> - 1.9.9-6
 - add `%%global debug_package %%{nil}` to avoid empty debuginfo-pkg.
 
