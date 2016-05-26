@@ -8,15 +8,21 @@
 
 Name:		burp2
 Summary:	A Network-based backup and restore program
-Version:	2.0.36
-Release:	1.git.1.c23642b%{?dist}
+Version:	2.0.38
+Release:	1%{?dist}
 Group:		Backup Server
 License:	AGPLv3 and BSD and GPLv2+ and LGPLv2+
 URL:		http://burp.grke.org/
-Source0:	https://github.com/grke/burp/archive/%{version}.tar.gz#/burp-%{version}.tar.gz
+Source0:	http://downloads.sourceforge.net/project/burp/burp-%{version}/burp-%{version}.tar.bz2
 Source1:	burp.init
 Source2:	burp.service
-BuildRequires:	autoconf
+Patch0:		define-htobe64.glibc.prior.2.9.patch
+Patch1:		burp-2.0.38-monitoring-client.patch
+
+%if 0%{?rhel} < 7
+BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
+%endif
+
 BuildRequires:	libtool
 BuildRequires:	librsync-devel
 BuildRequires:	zlib-devel
@@ -40,6 +46,7 @@ backing up Windows computers.
 
 %package client
 Summary:	burp backup client
+Group:		Backup Server
 Requires:	librsync >= 1.0
 Provides:	burp = %{version}-%{release}
 Provides:	burp2-client = %{version}-%{release}
@@ -61,7 +68,11 @@ backing up Windows computers.
 
 %package doc
 Summary:	Documentation and samples for Burp backup
+Group:		Backup Server
+# RHEL 5 does not support noarch subpackages
+%if 0%{?fedora} || 0%{?rhel} >= 6
 BuildArch:	noarch
+%endif
 
 %description doc
 Burp is a network backup and restore program, using client and server.
@@ -73,6 +84,7 @@ backing up Windows computers.
 
 %package server
 Summary:	burp backup server
+Group:		Backup Server
 Requires:	burp2-client%{?_isa} = %{version}-%{release}
 Requires:	openssl-perl
 Provides:	burp-server = %{version}-%{release}
@@ -89,9 +101,10 @@ backing up Windows computers.
 
 %prep
 %setup -q -n burp-%{version}
+%patch0 -p1
+%patch1 -p1
 
 %build
-autoreconf -vif
 %configure --sysconfdir=%{_sysconfdir}/burp --docdir=%{_defaultdocdir}/%{name}-%{version}
 make %{?_smp_mflags}
 
@@ -105,8 +118,8 @@ make install-all DESTDIR=%{buildroot}
 mkdir -p %{buildroot}%{_unitdir}
 install -p -m 0644 %{SOURCE2} %{buildroot}%{_unitdir}/
 %else
-mkdir -p %{buildroot}%{_initddir}
-install -p -m 0755 %{SOURCE1} %{buildroot}%{_initddir}/burp
+mkdir -p %{buildroot}%{_initrddir}
+install -p -m 0755 %{SOURCE1} %{buildroot}%{_initrddir}/burp
 %endif
 
 # -doc: add server scripts examples
@@ -172,7 +185,7 @@ cp -p configs/client/cron.example \
 %if 0%{?fedora} >= 19 || 0%{?rhel} >= 7
 %{_unitdir}/burp.service
 %else
-%{_initddir}/burp
+%{_initrddir}/burp
 %endif
 
 %post server
@@ -203,8 +216,15 @@ fi
 
 
 %changelog
-* Mon Apr 04 2016 Pierre Bourgin <pierre.bourgin@free.fr> - 2.0.36-1
+* Thu May 26 2016 Pierre Bourgin <pierre.bourgin@free.fr> - 2.0.38-1
 - Updated to latest released version
+- fix ncurses monitoring for a given client ("-C" option)
+- distfile from sf.net
+- el5: do not use autoreconf: distfile provides configure script and autoconf too old.
+- el5: provide htobe64
+- el5: define %%buildroot (<el7)
+- el5: does not support "noarch" subpackage
+- *WIP* packaging ongoing for el5
 
 * Wed Mar 02 2016 Pierre Bourgin <pierre.bourgin@free.fr> - 2.0.34-1
 - Initial spec file for burp2 package (forked from burp 1.x)
