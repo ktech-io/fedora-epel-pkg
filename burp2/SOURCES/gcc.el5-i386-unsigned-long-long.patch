@@ -1,0 +1,32 @@
+Build fails on el5 i386 platform (RHEL5) with gcc 4.1.2
+( gcc (GCC) 4.1.2 20080704 (Red Hat 4.1.2-55)) 
+with the following message:
+
+  src/protocol2/blk.c:84: error: integer constant is too large for 'long' type
+  
+This does NOT happens on el5 x86_64 platform.
+
+More details: http://stackoverflow.com/questions/1458923/long-long-in-c-c
+
+--- burp-2.0.38/src/protocol2/blk.c.old	2016-05-01 07:59:47.000000000 +0200
++++ burp-2.0.38/src/protocol2/blk.c	2016-05-27 18:38:19.360641383 +0200
+@@ -77,7 +77,7 @@
+ 	return 0;
+ }
+ 
+-#define HOOK_MASK       0xF000000000000000
++#define HOOK_MASK       0xF000000000000000ULL
+ 
+ int blk_fingerprint_is_hook(struct blk *blk)
+ {
+--- burp-2.0.38/src/server/manio.c.old	2016-05-01 07:59:47.000000000 +0200
++++ burp-2.0.38/src/server/manio.c	2016-05-27 18:52:52.205266206 +0200
+@@ -537,7 +537,7 @@
+ 	if(manio->dindex_sort)
+ 	{
+ 		uint64_t savepath=blk->savepath;
+-		savepath &= 0xFFFFFFFFFFFF0000;
++		savepath &= 0xFFFFFFFFFFFF0000ULL;
+ 		// Ignore obvious duplicates.
+ 		if(!manio->dindex_count
+ 		  || manio->dindex_sort[manio->dindex_count-1]!=savepath)

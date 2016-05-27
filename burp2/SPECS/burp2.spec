@@ -9,7 +9,7 @@
 Name:		burp2
 Summary:	A Network-based backup and restore program
 Version:	2.0.38
-Release:	1%{?dist}
+Release:	2%{?dist}
 Group:		Backup Server
 License:	AGPLv3 and BSD and GPLv2+ and LGPLv2+
 URL:		http://burp.grke.org/
@@ -18,6 +18,7 @@ Source1:	burp.init
 Source2:	burp.service
 Patch0:		define-htobe64.glibc.prior.2.9.patch
 Patch1:		burp-2.0.38-monitoring-client.patch
+Patch2:		gcc.el5-i386-unsigned-long-long.patch
 
 %if 0%{?rhel} < 7
 BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
@@ -103,6 +104,7 @@ backing up Windows computers.
 %setup -q -n burp-%{version}
 %patch0 -p1
 %patch1 -p1
+%patch2 -p1
 
 %build
 %configure --sysconfdir=%{_sysconfdir}/burp --docdir=%{_defaultdocdir}/%{name}-%{version}
@@ -216,6 +218,9 @@ fi
 
 
 %changelog
+* Fri May 27 2016 Pierre Bourgin <pierre.bourgin@free.fr> - 2.0.38-7
+- fix build for el5 i386 platform (unbreak unsigned long long stuff)
+
 * Thu May 26 2016 Pierre Bourgin <pierre.bourgin@free.fr> - 2.0.38-1
 - Updated to latest released version
 - fix ncurses monitoring for a given client ("-C" option)
