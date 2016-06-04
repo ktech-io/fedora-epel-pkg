@@ -8,17 +8,15 @@
 
 Name:		burp2
 Summary:	A Network-based backup and restore program
-Version:	2.0.38
-Release:	2%{?dist}
+Version:	2.0.40
+Release:	1%{?dist}
 Group:		Backup Server
 License:	AGPLv3 and BSD and GPLv2+ and LGPLv2+
 URL:		http://burp.grke.org/
 Source0:	http://downloads.sourceforge.net/project/burp/burp-%{version}/burp-%{version}.tar.bz2
 Source1:	burp.init
 Source2:	burp.service
-Patch0:		define-htobe64.glibc.prior.2.9.patch
-Patch1:		burp-2.0.38-monitoring-client.patch
-Patch2:		gcc.el5-i386-unsigned-long-long.patch
+Patch10:	burp-2.0.40-status-monitor.patch
 
 %if 0%{?rhel} < 7
 BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
@@ -102,9 +100,7 @@ backing up Windows computers.
 
 %prep
 %setup -q -n burp-%{version}
-%patch0 -p1
-%patch1 -p1
-%patch2 -p1
+%patch10 -p1
 
 %build
 %configure --sysconfdir=%{_sysconfdir}/burp --docdir=%{_defaultdocdir}/%{name}-%{version}
@@ -146,6 +142,8 @@ cp -p configs/client/cron.example \
       %{buildroot}%{_sysconfdir}/burp/burp.conf \
       %{mydocbuild}/client/.
 
+# -server: do not provide a (test)client
+rm %{buildroot}%{_sysconfdir}/burp/clientconfdir/testclient
 
 %files doc
 %{_defaultdocdir}/%{name}-%{version}/
@@ -174,7 +172,6 @@ cp -p configs/client/cron.example \
 %config(noreplace) %{_sysconfdir}/burp/CA.cnf
 %config(noreplace) %{_sysconfdir}/burp/burp-server.conf
 %config(noreplace) %{_sysconfdir}/burp/clientconfdir/incexc/example
-%config(noreplace) %{_sysconfdir}/burp/clientconfdir/testclient
 %dir %{_sysconfdir}/burp/clientconfdir/incexc
 %dir %{_sysconfdir}/burp/clientconfdir
 %dir %{_localstatedir}/spool/burp %attr(750 root root)
@@ -218,6 +215,13 @@ fi
 
 
 %changelog
+* Sat Jun 04 2016 Pierre Bourgin <pierre.bourgin@free.fr> - 2.0.40-1
+- Updated to latest released version
+- merge spec with el5 branch
+- do not use autoreconf anymore
+- include fix on status monitor
+- do not provide a (test)client configuration
+
 * Fri May 27 2016 Pierre Bourgin <pierre.bourgin@free.fr> - 2.0.38-7
 - fix build for el5 i386 platform (unbreak unsigned long long stuff)
 
