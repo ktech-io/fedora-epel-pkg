@@ -85,7 +85,7 @@ Summary:	burp backup server
 Group:		Backup Server
 Requires:	burp2-client%{?_isa} = %{version}-%{release}
 Requires:	openssl-perl
-Provides:	burp-server = %{version}-%{release}
+Provides:	burp2-server = %{version}-%{release}
 Provides:	bedup = %{version}-%{release}
 Provides:	vss_strip = %{version}-%{release}
 
