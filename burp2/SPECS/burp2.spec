@@ -9,13 +9,14 @@
 Name:		burp2
 Summary:	A Network-based backup and restore program
 Version:	2.0.44
-Release:	1%{?dist}
+Release:	kronos1%{?dist}
 Group:		Backup Server
 License:	AGPLv3 and BSD and GPLv2+ and LGPLv2+
 URL:		http://burp.grke.org/
 Source0:	http://downloads.sourceforge.net/project/burp/burp-%{version}/burp-%{version}.tar.bz2
 Source1:	burp.init
 Source2:	burp.service
+Patch0:		burp-2.0.42-restore_nolock.patch
 
 %if 0%{?rhel} < 7
 BuildRoot:	%(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
@@ -99,6 +100,7 @@ backing up Windows computers.
 
 %prep
 %setup -q -n burp-%{version}
+%patch0 -p1 -b .restore_nolock
 
 %build
 %configure --sysconfdir=%{_sysconfdir}/burp --docdir=%{_defaultdocdir}/%{name}-%{version}
@@ -213,6 +215,9 @@ fi
 
 
 %changelog
+* Fri Aug 05 2016 Patrick Brideau <pbrideau@kronostechnologies.com> - 2.0.44-kronos1
+- Add patch to allow restore during backup
+
 * Thu Aug 04 2016 Pierre Bourgin <pierre.bourgin@free.fr> - 2.0.44-1
 - Updated to latest released version
 
