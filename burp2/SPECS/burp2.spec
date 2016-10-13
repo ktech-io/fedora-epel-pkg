@@ -8,7 +8,7 @@
 
 Name:		burp2
 Summary:	A Network-based backup and restore program
-Version:	2.0.46
+Version:	2.0.48
 Release:	kronos1%{?dist}
 Group:		Backup Server
 License:	AGPLv3 and BSD and GPLv2+ and LGPLv2+
@@ -214,9 +214,14 @@ fi
 
 
 %changelog
-
-* Wed Sep 07 2016 Patrick Brideau <pbrideau@kronostechnologies.com> - 2.0.46-kronos1
+* Wed Oct 13 2016 Patrick Brideau <pbrideau@kronostechnologies.com> - 2.0.48-kronos1
 - Updated to latest released version (With patch restore_nolock)
+
+* Sat Oct 01 2016 Pierre Bourgin <pierre.bourgin@free.fr> - 2.0.48-1
+- Updated to latest released version
+
+* Tue Sep 06 2016 Pierre Bourgin <pierre.bourgin@free.fr> - 2.0.46-1
+- Updated to latest released version
 
 * Mon Aug 15 2016 Pierre Bourgin <pierre.bourgin@free.fr> - 2.0.44-2
 - Removed 'Provides: burp-server' property (fix https://github.com/yopito/fedora-epel-pkg/issues/2)
