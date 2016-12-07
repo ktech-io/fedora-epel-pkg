@@ -215,7 +215,7 @@ fi
 
 
 %changelog
-* Wed Deb 07 2016 Patrick Brideau <pbrideau@kronostechnologies.com> - 2.0.52-kronos1
+* Wed Dec 07 2016 Patrick Brideau <pbrideau@kronostechnologies.com> - 2.0.52-kronos1
 - Updated to latest released version (With patch restore_nolock)
 
 * Wed Nov 09 2016 Pierre Bourgin <pierre.bourgin@free.fr> - 2.0.52-1
