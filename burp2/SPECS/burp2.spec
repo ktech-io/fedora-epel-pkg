@@ -3,12 +3,13 @@
 #
 # XXX Group "Backup Server" is unknown (f22+)
 # XXX use a dedicated user for burp ?
+# XXX link against tcpwrappers ?
 # XXX SElinux stuff ?
 # XXX remove packaging notes.
 
 Name:		burp2
 Summary:	A Network-based backup and restore program
-Version:	2.0.48
+Version:	2.0.52
 Release:	kronos1%{?dist}
 Group:		Backup Server
 License:	AGPLv3 and BSD and GPLv2+ and LGPLv2+
@@ -214,6 +215,15 @@ fi
 
 
 %changelog
+* Wed Deb 07 2016 Patrick Brideau <pbrideau@kronostechnologies.com> - 2.0.52-kronos1
+- Updated to latest released version (With patch restore_nolock)
+
+* Wed Nov 09 2016 Pierre Bourgin <pierre.bourgin@free.fr> - 2.0.52-1
+- Updated to latest released version
+
+* Thu Nov 03 2016 Pierre Bourgin <pierre.bourgin@free.fr> - 2.0.50-1
+- Updated to latest released version
+
 * Wed Oct 13 2016 Patrick Brideau <pbrideau@kronostechnologies.com> - 2.0.48-kronos1
 - Updated to latest released version (With patch restore_nolock)
 
