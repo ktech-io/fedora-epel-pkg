@@ -9,7 +9,7 @@
 
 Name:		burp2
 Summary:	A Network-based backup and restore program
-Version:	2.0.52
+Version:	2.0.54
 Release:	kronos1%{?dist}
 Group:		Backup Server
 License:	AGPLv3 and BSD and GPLv2+ and LGPLv2+
@@ -215,6 +215,12 @@ fi
 
 
 %changelog
+* Wed Jan 04 2017 Patrick Brideau <pbrideau@kronostechnologies.com> - 2.0.54-kronos1
+- Updated to latest released version (With patch restore_nolock)
+
+* Tue Jan 03 2017 Pierre Bourgin <pierre.bourgin@free.fr> - 2.0.54-1
+- Updated to latest released version
+
 * Wed Dec 07 2016 Patrick Brideau <pbrideau@kronostechnologies.com> - 2.0.52-kronos1
 - Updated to latest released version (With patch restore_nolock)
 
